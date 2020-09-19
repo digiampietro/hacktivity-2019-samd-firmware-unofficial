@@ -63,8 +63,8 @@ void setup() {
   digitalWrite(PIN_I2C_INT,   LOW);  //No I2C interrupt
 
   //Start the USB-serial port and the UART connected to the ESP32
-  Serial1.begin(115200);
-  Serial.begin(115200);
+  Serial1.begin(115200);    // ESP32 Serial Interface
+  Serial.begin(115200);     // USB Serial Interface
 
   //Small delay to let things settle
   delay(50);
@@ -99,11 +99,22 @@ void setup() {
   
   t=new Touchcontrol(300);
   l=new LEDcontrol(10);
+  // l=new LEDcontrol(10000);
   l->alloff();
-
-  //digitalWrite(PIN_LED_AR, LOW);  //On
-  //digitalWrite(PIN_LED_AG, HIGH); //Off
-  //digitalWrite(PIN_LED_AB, HIGH); //Off
+  
+  // digitalWrite(PIN_LED_AR, LOW);   //On
+  // digitalWrite(PIN_LED_AG, HIGH);  //Off
+  // digitalWrite(PIN_LED_AB, HIGH);  //Off
+  // by Valerio
+  // digitalWrite(PIN_LCD_BACKL, HIGH);
+  // digitalWrite(PIN_LED_C1,    LOW);
+  // digitalWrite(PIN_LED_C2,    LOW);
+  // digitalWrite(PIN_LED_C3,    LOW);
+  // digitalWrite(PIN_LED_C4,    LOW);
+  // digitalWrite(PIN_LED_C5,    LOW);
+  // digitalWrite(PIN_LED_C6,    LOW);
+  
+  // delay(500);
 }
 
 
@@ -220,8 +231,8 @@ inline void update_reset_status()
     previousResetMillis = currentResetMillis;
     uint8_t lineState = getLineState();
     if (lineState!=prevLineState) {
-        if (lineState == 0x02) resetTrigger = 20;
-        if (lineState == 0x01 && resetTrigger > 0) {
+        if (lineState == 0x02) resetTrigger = 20;         // RTS ?     
+        if (lineState == 0x01 && resetTrigger > 0) {      // DTR ?      
           resetTrigger = 0;
           //To bootloader mode
           digitalWrite(PIN_ESP_GPIO0,LOW);
@@ -269,35 +280,86 @@ inline void update_usb_status()
   }
 }
 
+#define BUFLEN 512
+
+inline void my_update_serial()
+{
+  int n0=0;
+  int m0=0;;
+  int n1=0;
+  int m1=0;
+  int min0=0;
+  int min1=0;
+  char buf[BUFLEN];
+
+  while (( ((n0=Serial.available())  > 0)  and   ((m0=Serial1.availableForWrite()) > 0 ) )
+     or  ( ((n1=Serial1.available()) > 0)  and   ((m1=Serial.availableForWrite())  > 0 ) )) {
+
+    if (n0 > 0) {
+      min0=min(n0,m0);
+      min0=min(min0,BUFLEN);    
+      if (min0 > 0) {
+            Serial.readBytes(buf,min0);
+            Serial1.write(buf,min0);
+      }
+    }
+
+    if (n1 > 0) {
+      min1=min(n1,m1);  
+      min1=min(min1,BUFLEN);  
+      if (min1 > 0) {
+            Serial1.readBytes(buf,min1);
+            Serial.write(buf,min1);
+      }
+    }
+    n0=0;
+    m0=0;
+    n1=0;
+    m1=0;
+ }
+}
+
 inline void update_serial()
 {
-  while (Serial.available()) {
-    Serial1.write(Serial.read());
-  }
-  
-  while (Serial1.available()) {
-    Serial.write(Serial1.read());
+  while (Serial.available() or Serial1.available()) {
+    if (Serial.available()) {
+      Serial1.write(Serial.read());
+    }
+    if (Serial1.available()) {
+      Serial.write(Serial1.read());
+    }
   }
 }
 
 void loop()
 {
-  update_serial();
+  my_update_serial();
   
   //responsebuffer[0] ^= (-digitalRead(PIN_BTN) ^ responsebuffer[0]) & (1UL << 7);
+
   if (!digitalRead(PIN_BTN)) {
       digitalWrite(PIN_ESP_RESET,LOW);
+      if (bitRead(responsebuffer[0],5) == 1) {
+        digitalWrite(PIN_ESP_GPIO0,LOW);
+      } else {
+        digitalWrite(PIN_ESP_GPIO0,HIGH);
+      }
       delay(100);
       digitalWrite(PIN_ESP_RESET,HIGH);
   }
   
   update_vbatt_status();
-  update_serial();
-  update_reset_status();
-  update_serial();
-  update_usb_status();
-  update_touch_status();
-  t->tick();
-}
+  my_update_serial();
 
-    
+  update_reset_status();
+  my_update_serial();
+  
+  update_usb_status();
+  
+  update_touch_status();
+  my_update_serial();
+ 
+  t->tick();
+
+  // TC4_Handler();
+}

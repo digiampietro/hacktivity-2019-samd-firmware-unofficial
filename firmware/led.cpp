@@ -76,6 +76,8 @@ void timersetup(uint16_t counts) {
 
 void TC4_Handler()                              // Interrupt Service Routine (ISR) for timer TC4
 {
+  int i;
+  
   chindex+=1;
   if(chindex==4){
     chindex=0;
@@ -83,16 +85,20 @@ void TC4_Handler()                              // Interrupt Service Routine (IS
     if(ledindex==6){
       ledindex=0;
     }
-    for(int i=0;i<6;i++){
-      if(ledindex==i)digitalWrite(led_pins[i],HIGH);
-      else digitalWrite(led_pins[i],LOW);
+    for(int i=0;i<6;i++){ 
+      //- if(ledindex==i)digitalWrite(led_pins[i],HIGH);
+      //- else digitalWrite(led_pins[i],LOW);
+      if(ledindex==i)digitalWrite(led_pins[i],LOW);
+      else digitalWrite(led_pins[i],HIGH);
     }
   }
   for(int i=0;i<3;i++){
+    // led_channels[3*ledindex+chindex] = 254;
     if(i==chindex && led_channels[3*ledindex+chindex]>0)analogWrite(rgb_pins[i],255-led_channels[3*ledindex+chindex]);
     else {
       pinMode(rgb_pins[i],OUTPUT);
-      digitalWrite(rgb_pins[i],HIGH);
+      //- digitalWrite(rgb_pins[i],HIGH);
+      digitalWrite(rgb_pins[i],LOW);
     }
   }
   REG_TC4_INTFLAG = TC_INTFLAG_MC0;         // Clear the MC0 interrupt flag

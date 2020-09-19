@@ -9,12 +9,21 @@
 #define PIN_LED_AR     8
 #define PIN_LED_AG     9
 #define PIN_LED_AB    10
-#define PIN_LED_C1     7
-#define PIN_LED_C2     4
-#define PIN_LED_C3     6
-#define PIN_LED_C4     5
-#define PIN_LED_C5     3
-#define PIN_LED_C6     2
+//#define PIN_LED_C1     7
+//#define PIN_LED_C2     4
+//#define PIN_LED_C3     6
+//#define PIN_LED_C4     5
+//#define PIN_LED_C5     3
+//#define PIN_LED_C6     2
+
+#define PIN_LED_C1     6
+#define PIN_LED_C2     2
+#define PIN_LED_C3     4
+#define PIN_LED_C4     3
+#define PIN_LED_C5     7
+#define PIN_LED_C6     5
+
+
 #define PIN_I2C_INT   20
 #define PIN_ADC_VBATT A2
 #define PIN_TOUCH_1   29
