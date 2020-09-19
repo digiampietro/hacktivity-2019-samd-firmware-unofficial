@@ -35,7 +35,10 @@ The ESP32 can access the touch buttons, LEDs, speaker and battery voltage readin
 
 The firmware in this repository was originally written for Disobey.fi by Kliment and patched up a bit by Renze.
 
+It was patched by Valerio Di Giampietro for the Hacktivity 2019 badge (unofficial firmware), and to use this badge with the Arduino IDE, instead of microPython.
+
 Copyright 2019 badge.team
+Copyright 2020 Valerio Di Giampietro
 
 All code found in the firmware folder in this repository is licensed under the Apache license,
 as found below.
