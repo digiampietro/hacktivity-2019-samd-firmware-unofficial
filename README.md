@@ -1,3 +1,71 @@
+# About
+
+This is the unofficial firmware that can be loaded on the co-processor
+(the Atmel SAMD21G16B) of the
+[Hacktivity 2019 badge](https://hacktivity.com/index.php/badge/) and
+that will permit to use the Arduino IDE and environment to program it,
+instead of the MicroPython of the original firmware.
+
+This project has been forked from the
+[Disobey 2019 badge](https://github.com/badgeteam/disobey-2019-samd-firmware)
+firmware project. The Hactivity and the Disobey 2019 badges have very
+different shapes, but their circuits are very similar, but not
+identical.
+
+The main differences between this firmware and the original Disobey
+2019 firmware are:
+
+- minor differences in managing the leds on the board, due to slightly
+  different circuits;
+
+- increased the USB/UART buffer size from 64 bytes to 1024 bytes, to
+  prevent dropping bytes during serial transmission at 115200 bps;
+
+- the serial brdige (from USB/UART to ESP32 Uart interface) has been
+  rewritten to be non blocking and to use a small buffer, to prevent
+  dropping bytes during serial transmission.
+
+These modifications allow to use the Arduino IDE to program the ESP32,
+that is the main processor on this board.
+
+# Warning
+
+Loading this alternative and unofficial firmware on the badge will
+destroy the current, MicroPython based, firmware. You will not be able
+to rollback this modification, unless you save the original firmware
+first (can be complicated to do and requires additional equipments).
+
+# The Hacktivity 2019 badge
+
+This badge was distributed at the Hacktivity 2019 Security Conference attendee:
+
+## Top View
+
+![Top view](./images/badge-fron-03.jpg)
+
+## Bottom View
+
+![Bottom view](./images/badge-retro-03.jpg)
+
+## Top View Pinout
+
+![Top view Pinout](./images/badge-pinout.png)
+
+## Bottom View Switches
+
+![Bottom view switches](./images/layout-bottom-switches.png)
+
+## Pinout Description
+
+### J9 Connector
+
+![J9 Connector](./images/j9-pinout.png)
+
+### J10 Connector
+
+![J10 Connector](./images/j10-pinout.png)
+
+
 # What is this?
 This is the firmware running on the SAMD co-processor found on the Disobey 2019 badge
 
@@ -38,6 +106,7 @@ The firmware in this repository was originally written for Disobey.fi by Kliment
 It was patched by Valerio Di Giampietro for the Hacktivity 2019 badge (unofficial firmware), and to use this badge with the Arduino IDE, instead of microPython.
 
 Copyright 2019 badge.team
+
 Copyright 2020 Valerio Di Giampietro
 
 All code found in the firmware folder in this repository is licensed under the Apache license,
