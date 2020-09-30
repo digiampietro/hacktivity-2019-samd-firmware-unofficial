@@ -15,14 +15,14 @@ identical.
 The main differences between this firmware and the original Disobey
 2019 firmware are:
 
-- minor differences in managing the leds on the board, due to slightly
+- minor differences in managing the LEDs on the board, due to slightly
   different circuits;
 
 - increased the USB/UART buffer size from 64 bytes to 1024 bytes, to
   prevent dropping bytes during serial communication at 115200 bps;
 
 - the serial bridge (from USB/UART to ESP32 Uart interface) has been
-  rewritten to be non blocking and to use a small buffer, to prevent
+  rewritten to be non-blocking and to use a small buffer, to prevent
   dropping bytes during serial transmission.
 
 These modifications allow to use the Arduino IDE to program the ESP32,
@@ -32,15 +32,15 @@ that is the main processor on this board.
 
 Loading this alternative and unofficial firmware on the badge will
 destroy the current firmware. You will not be able to rollback this
-modification, unless you save the original firmware first (can be
+modification unless you save the original firmware first (can be
 complicated to do and requires additional equipments).
 
 # The Hacktivity 2019 badge
 
 This badge was distributed at the Hacktivity 2019 Security Conference
 attendee, it is based on the popular ESP32 processor by Espressif and
-includes an ARM based chip, the Atmel ATSAMD21G16B co-processor, that
-manages the USB serial connection, the touch buttons and the LEDs on
+includes an ARM-based chip, the Atmel ATSAMD21G16B co-processor, that
+manages the USB serial connection, the touch buttons, and the LEDs on
 the board. The co-processor communicates with the main ESP32 processor
 trough the I2C bus.
 
@@ -100,7 +100,7 @@ To re-compile it:
 5. open "firmware.ino" with the Arduino IDE and click "Sketch > Export
    compiled binary";
 
-6. in the Arduine IDE logging window, locate where the compiled binary
+6. in the Arduino IDE logging window, locate where the compiled binary
    has been created (something similar to
    "/tmp/arduino\_build\_nnnnnn\_/firmware.ino.bin")
 
@@ -111,7 +111,7 @@ To re-compile it:
    load the firmware on the ESP32 main processor.
 
 1. Install the [dfu-util](http://dfu-util.sourceforge.net/) software
-   on your PC. Available for Linux, Windows and Mac.
+   on your PC. Available for Linux, Windows, and Mac.
 
 2. Solder on SW1 and SW2 if you did not do that already. Alternatively
    you can use a couple of jumper wires to achieve a similar result.
@@ -134,13 +134,13 @@ To re-compile it:
 The firmware allows for connecting to the serial port of the ESP32 at
 115200 baud and can be used with the Arduino IDE to program the ESP32.
 
-To do so it is needed to manually select the ESP32 in the Arduine IDE:
+To do so it is needed to manually select the ESP32 in the Arduino IDE:
 "Tools -> Board -> ESP32 Arduino -> ESP32 Dev Module".
 
 If the "ESP32 Arduino" menu item is not available you have to install
 support for ESP32 based boards using the Board Manager.
 
-The ESP32 can access the touch buttons, LEDs, speaker and battery
+The ESP32 can access the touch buttons, LEDs, speaker, and battery
 voltage readings over I2C.
 
 # The I2C protocol
@@ -152,7 +152,7 @@ The co-processor I2C address is 0x30.
 
 To exchange information there is a simple protocol: the ESP32
 processor starts the data exchange and can send commands (to switch on
-some leds, or activate the buzzer) or can read the status of the
+some LEDs, or activate the buzzer) or can read the status of the
 SAMD21 (touch button status and battery status).
 
 ## All LEDs Off
@@ -231,7 +231,7 @@ bool SAMD::setLed(uint8_t id, uint8_t r, uint8_t g, uint8_t b) {
 
 The ESP32 sends the command byte 0x03 followed by 4 data bytes:
 
-1. most significant byte of the frequency (a 2 byte integer);
+1. most significant byte of the frequency (a 2-byte integer);
 
 2. least significant byte of the frequency
 
@@ -302,9 +302,9 @@ void SAMD::updateStatus(void) {
   it includes library files to use the Display and to interact with
   the SAMD21 co-processor
 
-* [The github repository for the Disobey 2019 badge](https://github.com/disobeyfi/badge-2019)
+* [The GitHub repository for the Disobey 2019 badge](https://github.com/disobeyfi/badge-2019)
 
-* [The github repository for the Disobey 2019 SAMD firmware](https://github.com/badgeteam/disobey-2019-samd-firmware). This
+* [The GitHub repository for the Disobey 2019 SAMD firmware](https://github.com/badgeteam/disobey-2019-samd-firmware). This
   project was forked from this repository
 
 * [Atmel SAMD21 family Data Sheet](https://cdn.sparkfun.com/datasheets/Dev/Arduino/Boards/Atmel-42181-SAM-D21_Datasheet.pdf)
